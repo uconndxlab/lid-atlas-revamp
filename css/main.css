@@ -1,0 +1,403 @@
+*{
+  box-sizing: border-box;
+  
+}
+
+body {
+  margin: 0;
+  font-family: ff-tisa-sans-web-pro, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #eee;
+}
+
+p{
+  line-height:26px;
+}
+
+a{
+  text-decoration:none;
+  color: #1a78eb;
+}
+
+a:hover{
+  color: #1259b0;
+}
+
+h1{
+  color: #1a78eb;
+}
+
+h3{
+  margin-bottom:10px;
+}
+
+.container {
+  margin:auto;
+  padding:20px;
+  padding-top:85px;
+}
+
+#nav{
+  padding:0px;
+}
+
+/* header */
+
+.header {
+  background-color: rgb(34, 34, 34);
+  box-shadow: 1px 1px 4px 0 rgba(0,0,0,.1);
+  position: fixed;
+  width: 100%;
+  z-index: 3;
+}
+
+.header ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  background-color: rgb(34, 34, 34);
+}
+
+.header li a {
+  display: block;
+  padding: 20px 20px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.header li a:hover,
+.header .menu-btn:hover {
+  background-color: rgb(8, 8, 8);
+}
+
+.header .logo {
+  display: block;
+  float: left;
+  font-size: 1.5em;
+  padding: 20px 20px;
+  text-decoration: none;
+  color:#fff;
+}
+
+/* menu */
+
+.header .menu {
+  clear: both;
+  max-height: 0;
+  transition: max-height .2s ease-out;
+}
+
+/* menu icon */
+
+.header .menu-icon {
+  cursor: pointer;
+  float: right;
+  padding: 32px 20px;
+  position: relative;
+  user-select: none;
+}
+
+.header .menu-icon .navicon {
+  background: #fff;
+  display: block;
+  height: 2px;
+  position: relative;
+  transition: .2s ease-out;
+  width: 18px;
+}
+
+.header .menu-icon .navicon:before,
+.header .menu-icon .navicon:after {
+  background: #fff;
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all .2s ease-out;
+  width: 100%;
+}
+
+.header .menu-icon .navicon:before {
+  top: 5px;
+}
+
+.header .menu-icon .navicon:after {
+  top: -5px;
+}
+
+/* menu btn */
+
+.header .menu-btn {
+  display: none;
+}
+
+.header .menu-btn:checked ~ .menu {
+  max-height: 240px;
+}
+
+.header .menu-btn:checked ~ .menu-icon .navicon {
+  background: transparent;
+}
+
+.header .menu-btn:checked ~ .menu-icon .navicon:before {
+  transform: rotate(-45deg);
+}
+
+.header .menu-btn:checked ~ .menu-icon .navicon:after {
+  transform: rotate(45deg);
+}
+
+.header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:before,
+.header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
+  top: 0;
+}
+
+
+#map {
+  height:70vh;
+  margin-top: 4%;
+  width: 100%;
+}
+
+.marker {
+  background-image: url('/img/mapbox-icon.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.mapboxgl-popup {
+  max-width: 200px;
+  }
+  .mapboxgl-popup-content {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  }
+
+.dropdown{
+  padding: 5px;
+  border-radius: 5px;
+  border:none;
+  width: 100%;
+}
+
+.checkbox-container {
+  display: block;
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor:pointer;
+}
+
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #ccc;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  background-color: #bbb;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #1a78eb;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-container .checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+select.states option:hover {
+  box-shadow: 0 0 10px 100px #1a78eb inset;
+}
+
+
+#nemologo{
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.wrapper {	
+	margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);  
+}
+  .form-signin-heading,
+	.checkbox {
+	  margin-bottom: 30px;
+	}
+
+	.checkbox {
+	  font-weight: normal;
+	}
+
+	.form-control {
+	  font-size: 16px;
+	  height: auto;
+    border:1px solid #ececec;
+    display:flex;
+    width:100%;
+    padding: 10px 0px 10px 10px;    
+	}
+
+	#username {
+	  margin-bottom: -1px;
+	  border-radius: 5px 5px 0px 0px;
+	}
+
+	#password {
+	  margin-bottom: 20px;
+	  border-radius: 0px 0px 5px 5px;
+	}
+
+  .remember-me{
+    margin-bottom: 20px;
+  }
+
+.login-button {
+  width:100%;
+  text-align: center;
+  border: none;
+  background-color: green;
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #1a78eb;
+}
+
+.login-button:hover{
+  background-color: #1259b0;
+  cursor: pointer;
+}
+
+#list-map-btn{
+  background-color: #1a78eb;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  color: #fff;
+  margin-top: 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+#list-map-btn:hover{
+  background-color: #1259b0;
+}
+
+#search{
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+/*
+.page-hero{
+    animation:
+        slideIn 0.65s .2s cubic-bezier(.5,1,1,1) both,
+        fadeIn .25s .2s ease-in both;
+    width: 100%;
+}
+
+@keyframes slideIn {
+    from {transform: translateX(-5%);}
+    to {transform:translateX(0%);}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+*/
+
+@media (min-width: 768px) {
+  .header li {
+    float: left;
+  }
+  .header li a {
+    padding: 24px 30px;
+  }
+
+  .header .menu {
+    clear: none;
+    float: right;
+    max-height: none;
+  }
+  .header .menu-icon {
+    display: none;
+  }
+  .content{
+    display:flex;
+  }
+
+  .map-filters{
+    width: 20%;
+    margin-right:2%;
+  }
+
+  .mapboxgl-ctrl-top-right {
+    margin-top: 65px;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right:0;
+  width: 77.4%;
+  height:auto;
+  margin-top:0%;
+}
+
+.mini-container{
+  max-width: 980px;
+  margin:auto;
+}
+  
+}
