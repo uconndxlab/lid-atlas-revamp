@@ -21,6 +21,7 @@
 </head>
 
 <body>
+  <div id="load"></div>
   <nav class="header">
     <div class="container" id="nav">
     <a href="index.html" class="logo">LID Atlas</a>
@@ -37,7 +38,7 @@
 
 
   
-  <div class="container">
+  <div  id="contents" class="container">
       <div class="content">
       <div class="map-filters">
         <div class="row">
@@ -92,7 +93,7 @@
 
         <span class="dropdown-state">
           <h3>State:</h3>
-          <select class="dropdown" name="state" size="1">    
+          <select id="state" class="dropdown" name="state" size="1">    
             <option value="all">All States</option>
 						<option value="AL" >Alabama</option>
             <option value="AK" >Alaska</option>
@@ -149,7 +150,7 @@
       </span>
       <span class="dropdown-land">
         <h3>Land Use Type:</h3>
-        <select class="dropdown" name="land">    
+        <select id="land" class="dropdown" name="land">    
           <option value="all">All Types</option>
           <option name="devType" id="devType" value="3">Civic/Public</option>
           <option name="devType" id="devType" value="1">Commercial</option>
@@ -158,15 +159,15 @@
           <option name="devType" id="devType" value="2">Residential</option>
         </select>
     </span>
-    <button id="list-map-btn">List View</button>
+    <button id="list-map-btn">Show List</button>
   </div>
+  <div id="list">
+    <h3 style="margin-top: 0"></h3>
+    <ul id="gathered_info"></ul>
+  </div>
+    <div>
+      <div id="map"></div>
       
-    
-    
-    <div class="row">
-        <div class="col">
-            <div id="map"></div>
-        </div>
     </div>
     </div>
 
@@ -199,77 +200,101 @@
   <script>
   mapboxgl.accessToken = 'pk.eyJ1IjoidGhlbmF0YXR0YWNrIiwiYSI6ImNrcWIzb2xqYzA4bGcydXBvOWk5cnpvdWgifQ.EEs2Ox8pWunarciy6oAptA';
 
-  var geojson = {
-'type': 'FeatureCollection',
-'features': [
-{
-'type': 'Feature',
-'geometry': {
-'type': 'Point',
-'coordinates': [-77.032, 38.913]
-},
-'properties': {
-'title': 'Point A',
-'description': 'Washington, D.C.'
-}
-},
-{
-'type': 'Feature',
-'geometry': {
-'type': 'Point',
-'coordinates': [-122.414, 37.776]
-},
-'properties': {
-'title': 'Point B',
-'description': 'San Francisco, California'
-}
-}
-]
-};
- 
-var map = new mapboxgl.Map({
+
+let map = new mapboxgl.Map({
 container: 'map',
 style: 'mapbox://styles/mapbox/streets-v11',
 center: [-96, 37.8],
 zoom: 3
 });
- 
-// add markers to map
-geojson.features.forEach(function (marker) {
-// create a HTML element for each feature
-var el = document.createElement('div');
-el.className = 'marker';
- 
-// make a marker for each feature and add it to the map
-new mapboxgl.Marker(el)
-.setLngLat(marker.geometry.coordinates)
-.setPopup(
-new mapboxgl.Popup({ offset: 25 }) // add popups
-.setHTML(
-'<h3>' +
-marker.properties.title +
-'</h3><p>' +
-marker.properties.description +
-'</p>'
-)
-)
-.addTo(map);
-});
+
+var currentMarkers=[]
+
+async function getData(url){
+  if (currentMarkers!=null){
+    for (var i = currentMarkers.length - 1; i >= 0; i--){
+      currentMarkers[i].remove();
+    }
+  }
+  const response = await fetch(url)
+  var data = await response.json()
+  for (i in data){
+    var el = document.createElement('div');
+    el.className = 'marker';
+    var marker = new mapboxgl.Marker(el)
+    .setLngLat([data[i].longitude, data[i].latitude])
+    .setPopup(
+    new mapboxgl.Popup({ offset: 25 }) // add popups
+    .setHTML(
+    '<h3>' +
+    data[i].projectName +
+    '</h3><p>' +
+    data[i].caption +
+    '</p>'
+    )
+    )
+    .addTo(map);
+   currentMarkers.push(marker)
+  }
+  
+}
 
 map.addControl(new mapboxgl.NavigationControl());
 
+var statevalue = ""
+var devtype = ""
 
+function getUrl(){
+  return 'https://nemo.uconn.edu/api/projects?limit=5000'+statevalue+devtype
+}
 
+var state = document.getElementById('state')
+
+state.addEventListener('click', () => {
+  statevalue = '&state='+state.value
+  if (state.value==='all'){
+    statevalue = ""
+  }
+  getData(getUrl())
+})
 
   var listmap = document.getElementById('list-map-btn')
+  var listshow = document.getElementById('list')
   listmap.addEventListener('click', () => {
-    if (listmap.innerHTML == 'List View'){
-      listmap.innerHTML = 'Map View';
+    if (listmap.innerHTML == 'Show List'){
+      listmap.innerHTML = 'Hide List';
+      showList()
     }
     else{
-      listmap.innerHTML = 'List View';
+      listmap.innerHTML = 'Show List';
+      hideList()
   }
   })
+  /*
+  let list = document.getElementById('list')
+  function showList(){
+    var map = document.getElementById('map')
+    var x = window.matchMedia("(min-width:768px)")
+    if (x.matches){
+    map.style.width = '50%'
+    list.style.zIndex = 2
+    list.style.height = contain;}
+
+  }
+
+  function hideList(){
+    var map = document.getElementById('map')
+    var x = window.matchMedia("(min-width:768px)")
+    if (x.matches){
+    map.style.width = '77.4%'
+    list.style.zIndex = 0}
+    else{
+      map.style.width = '100%';
+      list.style.zIndex = -1;
+      list.style.height = 0;
+    }
+  }
+*/
 
   var allproj = document.getElementById('allproj');
   document.querySelectorAll('.project').forEach(item => {item.addEventListener('click', () => {
@@ -288,8 +313,21 @@ map.addControl(new mapboxgl.NavigationControl());
     }
   })
 
+  document.onreadystatechange = function () {
+  var state = document.readyState
+  if (state == 'interactive') {
+       document.getElementById('contents').style.visibility="hidden";
+  } else if (state == 'complete') {
+      setTimeout(function(){
+         document.getElementById('interactive');
+         document.getElementById('load').style.visibility="hidden";
+         document.getElementById('contents').style.visibility="visible";
+      },1000);
+  }
+}
 
-
+  
+  getData('https://nemo.uconn.edu/api/projects?limit=5000')
 
   </script>
 
