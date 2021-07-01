@@ -208,6 +208,8 @@ center: [-96, 37.8],
 zoom: 3
 });
 
+//clear current map, get data, put data into array, map data
+
 var currentMarkers=[]
 
 async function getData(url){
@@ -249,7 +251,9 @@ function getUrl(){
 }
 
 var state = document.getElementById('state')
+var land = document.getElementById('land')
 
+//state filter dropdown
 state.addEventListener('click', () => {
   statevalue = '&state='+state.value
   if (state.value==='all'){
@@ -257,6 +261,17 @@ state.addEventListener('click', () => {
   }
   getData(getUrl())
 })
+
+//land filter dropdown
+land.addEventListener('click', () => {
+  devtype = '&developmentTypeID='+land.value
+  if (land.value==='all'){
+    devtype = ""
+  }
+  console.log(getUrl())
+  getData(getUrl())
+})
+
 
   var listmap = document.getElementById('list-map-btn')
   var listshow = document.getElementById('list')
@@ -296,6 +311,7 @@ state.addEventListener('click', () => {
   }
 */
 
+  //project type checkbox filter
   var allproj = document.getElementById('allproj');
   document.querySelectorAll('.project').forEach(item => {item.addEventListener('click', () => {
     allproj.checked=false;
@@ -313,6 +329,7 @@ state.addEventListener('click', () => {
     }
   })
 
+  //show loading sign until ready to display
   document.onreadystatechange = function () {
   var state = document.readyState
   if (state == 'interactive') {
