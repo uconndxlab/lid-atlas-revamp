@@ -46,46 +46,46 @@
               <input class="form-control" id="search" type="text" placeholder="Search..."/>
           </div>
       </div>
-        <span class="checkbox-filters">
+        <span id="project-filters" class="checkbox-filters">
             <label class="checkbox-container">All Projects
-              <input id="allproj" type="checkbox" checked="checked" value="ShowAll">
+              <input id="allproj" type="checkbox" checked="checked" value="all">
               <span class="checkmark"></span>
             </label>
             <hr width="100px" style="margin: 20px 0; border:1px solid #ccc;">
             <label class="checkbox-container">Swale/Bioswale
-              <input class="project" type="checkbox" value="1">
+              <input class="project" name="project" checked="checked" type="checkbox" value="1">
               <span class="checkmark"></span>
             </label>
             <label class="checkbox-container">Bioretention/Rain Garden
-              <input class="project" type="checkbox" value="2">
+              <input class="project" name="project" checked="checked" type="checkbox" value="2">
               <span class="checkmark"></span>
             </label>
             <label class="checkbox-container">Cistern/Rain Barrel
-              <input class="project" type="checkbox" value="3">
+              <input class="project" name="project" checked="checked" type="checkbox" value="3">
               <span class="checkmark"></span>
             </label>
             <label class="checkbox-container">Stormwater Wetlands
-              <input class="project" type="checkbox" value="4">
+              <input class="project" name="project" checked="checked" type="checkbox" value="4">
               <span class="checkmark"></span>
             </label>
             <label class="checkbox-container">Green Roof
-              <input class="project" type="checkbox" value="5">
+              <input class="project" name="project" checked="checked" type="checkbox" value="5">
               <span class="checkmark"></span>
             </label>
             <label class="checkbox-container">Permeable Pavement
-              <input class="project" type="checkbox" value="6">
+              <input class="project" name="project" checked="checked" type="checkbox" value="6">
               <span class="checkmark"></span>
             </label>
             <label class="checkbox-container">Water Conservation
-              <input class="project" type="checkbox" value="7">
+              <input class="project" name="project" checked="checked" type="checkbox" value="7">
               <span class="checkmark"></span>
             </label>
             <label class="checkbox-container">Green Streets
-              <input class="project" type="checkbox" value="8">
+              <input class="project" name="project" checked="checked" type="checkbox" value="8">
               <span class="checkmark"></span>
             </label>
             <label class="checkbox-container">Other
-              <input class="project" type="checkbox" value="9">
+              <input class="project" name="project" checked="checked" type="checkbox" value="9">
               <span class="checkmark"></span>
             </label>
 
@@ -243,11 +243,13 @@ async function getData(url){
 
 map.addControl(new mapboxgl.NavigationControl());
 
+var projects = []
 var statevalue = ""
 var devtype = ""
+var projtype = ""
 
 function getUrl(){
-  return 'https://nemo.uconn.edu/api/projects?limit=5000'+statevalue+devtype
+  return 'https://nemo.uconn.edu/api/projects?limit=5000'+statevalue+devtype+projtype
 }
 
 var state = document.getElementById('state')
@@ -271,6 +273,54 @@ land.addEventListener('click', () => {
   console.log(getUrl())
   getData(getUrl())
 })
+
+ //project type checkbox filter
+
+ var checkboxes = document.querySelectorAll('.project');
+ var projectfilters = document.getElementById('project-filters')
+
+ var allproj = document.getElementById('allproj');
+  document.querySelectorAll('.project').forEach(item => {item.addEventListener('click', () => {
+    allproj.checked=false;
+    })
+  })
+
+  allproj.addEventListener('click', () => {
+    allproj.setAttribute('checked',true)
+    if (allproj.checked){
+    checkboxes.forEach(item => {item.checked=true})
+    projtype = ""
+    getData(getUrl())
+    }
+    else{
+      checkboxes.forEach(item => {item.checked=false})
+    }
+  })
+
+
+  function getSelectedCheckboxes(name) {
+    const projcheckboxes = document.querySelectorAll('input[name="project"]:checked');
+    projects = []
+    projcheckboxes.forEach((checkbox) => {
+      projects.push(checkbox.value);
+    })
+    if (projects.length == 9 || projects.length == 0){
+      projtype = ""
+      console.log(projects)
+    }
+    else{
+      projtype="&typeID="+projects.join(',')
+      console.log(projects)
+    }
+    getData(getUrl())
+  }
+
+  projectfilters.addEventListener('click', (event) => {
+    getSelectedCheckboxes('project')
+  })
+  
+
+
 
 
   var listmap = document.getElementById('list-map-btn')
@@ -311,23 +361,7 @@ land.addEventListener('click', () => {
   }
 */
 
-  //project type checkbox filter
-  var allproj = document.getElementById('allproj');
-  document.querySelectorAll('.project').forEach(item => {item.addEventListener('click', () => {
-    allproj.checked=false;
-    })
-  })
-
-  allproj.addEventListener('click', () => {
-    allproj.setAttribute('checked',true)
-    var checkboxes = document.querySelectorAll('.project');
-    if (allproj.checked){
-    checkboxes.forEach(item => {item.checked=true})
-    }
-    else{
-      checkboxes.forEach(item => {item.checked=false})
-    }
-  })
+ 
 
   //show loading sign until ready to display
   document.onreadystatechange = function () {
