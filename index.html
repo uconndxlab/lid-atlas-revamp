@@ -31,7 +31,6 @@
       <li><a href="about.html">About</a></li>
       <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeC3sCIr6hPgsMH71d5VxDbaLNtcCa4uCSkO0M6OBTQJ1yKQA/viewform?formkey=dDg2RTkyZXlJMlZzbzZMbnJsb29RUlE6MQ#gid=0">Add</a></li>
       <li><a href="contact.html">Contact</a></li>
-	  <li><a href="login.html">Login</a></li>
     </ul>
   </div>
   </nav>
@@ -41,11 +40,11 @@
   <div  id="contents" class="container">
       <div class="content">
       <div class="map-filters">
-        <div class="row">
+        <!--<div class="row">
           <div class="col">
               <input class="form-control" id="search" type="text" placeholder="Search..."/>
           </div>
-      </div>
+      </div>-->
         <span id="project-filters" class="checkbox-filters">
             <label class="checkbox-container">All Projects
               <input id="allproj" type="checkbox" checked="checked" value="all">
@@ -159,7 +158,7 @@
           <option name="devType" id="devType" value="2">Residential</option>
         </select>
     </span>
-    <button id="list-map-btn">Show List</button>
+    <!--<button id="list-map-btn">Show List</button>-->
   </div>
   <div id="list">
     <h3 style="margin-top: 0"></h3>
@@ -222,7 +221,22 @@ async function getData(url){
   var data = await response.json()
   for (i in data){
     var el = document.createElement('div');
-    el.className = 'marker';
+    
+    if (data[i].developmentTypeID === 1){
+      el.className = 'marker-yellow';
+    }
+    else if (data[i].developmentTypeID === 2){
+      el.className = 'marker-blue';
+    }
+    else if (data[i].developmentTypeID === 3){
+      el.className = 'marker-red';
+    }
+    else if (data[i].developmentTypeID === 4){
+      el.className = 'marker-orange';
+    }
+    else if (data[i].developmentTypeID === 5){
+      el.className = 'marker-green';
+    }
     var marker = new mapboxgl.Marker(el)
     .setLngLat([data[i].longitude, data[i].latitude])
     .setPopup(
@@ -256,7 +270,7 @@ var state = document.getElementById('state')
 var land = document.getElementById('land')
 
 //state filter dropdown
-state.addEventListener('click', () => {
+state.addEventListener('change', () => {
   statevalue = '&state='+state.value
   if (state.value==='all'){
     statevalue = ""
@@ -265,12 +279,11 @@ state.addEventListener('click', () => {
 })
 
 //land filter dropdown
-land.addEventListener('click', () => {
+land.addEventListener('change', () => {
   devtype = '&developmentTypeID='+land.value
   if (land.value==='all'){
     devtype = ""
   }
-  console.log(getUrl())
   getData(getUrl())
 })
 
@@ -304,18 +317,23 @@ land.addEventListener('click', () => {
     projcheckboxes.forEach((checkbox) => {
       projects.push(checkbox.value);
     })
-    if (projects.length == 9 || projects.length == 0){
+    if (projects.length === 9){
       projtype = ""
-      console.log(projects)
+      getData(getUrl())
+    }
+    else if (projects.length === 0){
+      projtype = ""
+      for (var i = currentMarkers.length - 1; i >= 0; i--){
+      currentMarkers[i].remove();
+    }
     }
     else{
-      projtype="&typeID="+projects.join(',')
-      console.log(projects)
+      projtype="&typeID="+projects.join(',')    
+      getData(getUrl())
     }
-    getData(getUrl())
   }
 
-  projectfilters.addEventListener('click', (event) => {
+  projectfilters.addEventListener('change', (event) => {
     getSelectedCheckboxes('project')
   })
   
