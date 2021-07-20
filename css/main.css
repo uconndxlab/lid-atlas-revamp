@@ -186,8 +186,39 @@ h3{
   background-image: url('../img/mapbox-icon-yellow-01.png')
 }
 
+.legend{
+  display: flex;
+}
 
+.square {
+  width: 10px;
+  height: 10px;
+  margin: 8px 5px 0px 0px;
+}
 
+.legend p{
+  margin:0;
+}
+
+.blue {
+  background: #1593d1;
+}
+
+.orange {
+  background: #ed931b;
+}
+
+.yellow {
+  background: #efcb1d;
+}
+
+.red {
+  background: #d31313;
+}
+
+.green {
+  background: #008e07;
+}
 
 .mapboxgl-popup {
   max-width: 200px;
