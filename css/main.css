@@ -269,7 +269,7 @@ h3{
 }
 
 .checkbox-container input:checked ~ .checkmark {
-  background-color: #1a78eb;
+  background-color: rgb(34, 34, 34);
 }
 
 .checkmark:after {
